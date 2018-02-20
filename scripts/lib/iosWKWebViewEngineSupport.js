@@ -81,9 +81,8 @@ function loadProjectFile() {
       projectFile = platform_ios.parseProjectFile(iosPlatformPath);
     } catch (e) {
       // cordova 7.0 due to https://issues.apache.org/jira/browse/CB-11242 / https://github.com/apache/cordova-lib/pull/526
-      var project_files = context.requireCordovaModule('glob')
-        .sync(path.join(iosPlatformPath, '*.xcodeproj', 'project.pbxproj'));
-
+        var project_files = context.requireCordovaModule('glob')
+                .sync(path.join(iosPlatformPath, '*.xcodeproj', 'project.pbxproj'));
       if (project_files.length === 0) {
         throw new Error('does not appear to be an xcode project (no xcode project file)');
       }
@@ -114,7 +113,7 @@ function loadProjectFile() {
         }
       };
     }
-
+  }
   return projectFile;
 }
 
