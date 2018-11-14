@@ -17,18 +17,19 @@
 - (id)loadRequest:(NSURLRequest*)request
 {
     if ([self canLoadRequest:request]) { // can load, differentiate between file urls and other schemes
+        [self setLastRequest:request];
         if (request.URL.fileURL) {
             SEL wk_sel = NSSelectorFromString(CDV_WKWEBVIEW_FILE_URL_LOAD_SELECTOR);
-            
+
             // by default we set allowingReadAccessToURL property to the plugin's root folder,
             // so the WKWebView would load our updates from it.
             NSURL* readAccessUrl = [HCPFilesStructure pluginRootFolder];
-            
+
             // if we are loading index page from the bundle - we need to go up in the folder structure, so the next load from the external storage would work
             if (![request.URL.absoluteString containsString:readAccessUrl.absoluteString]) {
                 readAccessUrl = [[[request.URL URLByDeletingLastPathComponent] URLByDeletingLastPathComponent] URLByDeletingLastPathComponent];
             }
-            
+
             return ((id (*)(id, SEL, id, id))objc_msgSend)(self.engineWebView, wk_sel, request.URL, readAccessUrl);
         } else {
             return [(WKWebView*)self.engineWebView loadRequest:request];
