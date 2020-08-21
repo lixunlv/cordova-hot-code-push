@@ -4,7 +4,6 @@ Mainly, it has only two method: to activate and to deactivate swift support in t
 */
 
 var path = require('path');
-var xcode = require('xcode');
 var fs = require('fs');
 var strFormat = require('util').format;
 var COMMENT_KEY = /_comment$/;
@@ -72,7 +71,7 @@ function loadProjectFile() {
     return loadProjectFile_cordova_7_and_above();
   } catch(e) {
   }
-
+  
   try {
     return loadProjectFile_cordova_5_and_6();
   } catch(e) {
@@ -94,13 +93,13 @@ function loadProjectFile_cordova_pre_5() {
 
 function loadProjectFile_cordova_5_and_6() {
   var platformIos = context.requireCordovaModule('cordova-lib/src/plugman/platforms/ios');
-
+  
   return platformIos.parseProjectFile(iosPlatformPath);
 }
 
 function loadProjectFile_cordova_7_and_above() {
   var pbxPath = path.join(iosPlatformPath, projectName + '.xcodeproj', 'project.pbxproj');
-  var xcodeproj = xcode.project(pbxPath);
+  var xcodeproj = context.requireCordovaModule('xcode').project(pbxPath);
   xcodeproj.parseSync();
 
   var saveProj = function() {
